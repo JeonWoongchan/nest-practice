@@ -7,36 +7,52 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateMovieDto } from './dto/create-movie.dto';
+import { MoviesService } from './movies.service';
+import { Movie } from './entities/movie.entity';
+import { UpdateMovieDto } from './dto/update-movie.dto';
 
 @ApiTags('사용자 API')
 @Controller('/movies')
 export class MoviesController {
+  constructor(private readonly movieService: MoviesService) {}
+
+  @ApiOperation({ summary: '영화 전체 조회' })
+  @ApiResponse({
+    status: 200,
+    description: 'success',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'error',
+  })
   @Get()
-  getAll() {
-    return 'All Movies';
+  getAll(): Movie[] {
+    return this.movieService.getAll();
   }
 
-  @Get('/:id')
-  getOne(@Param('id') movieId: string) {
-    return `One Movie id = ${movieId}`;
+  @ApiOperation({ summary: 'id별 영화 조회' })
+  @Get(':id')
+  getOne(@Param('id') movieId: number): Movie {
+    return this.movieService.getOne(movieId);
   }
 
-  @ApiOperation({ summary: '영화 등록 API', description: '영화 추가' })
+  @ApiOperation({ summary: '영화 등록' })
   @Post()
   create(@Body() createMovieDto: CreateMovieDto) {
-    console.log(createMovieDto);
-    return 'create complete';
+    return this.movieService.create(createMovieDto);
   }
 
-  @Delete('/:id')
-  remove(@Param('id') movieId: string) {
-    return `remove Movie id = ${movieId}`;
+  @ApiOperation({ summary: '영화 삭제' })
+  @Delete(':id')
+  remove(@Param('id') movieId: number) {
+    return this.movieService.remove(movieId);
   }
 
-  @Patch('/:id')
-  patch(@Param('id') movieId: string) {
-    return `patch Movie id = ${movieId}`;
+  @ApiOperation({ summary: '영화 수정' })
+  @Patch(':id')
+  patch(@Param('id') movieId: number, @Body() updateMovieDto: UpdateMovieDto) {
+    return this.movieService.update(movieId, updateMovieDto);
   }
 }

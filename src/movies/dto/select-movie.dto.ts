@@ -1,7 +1,7 @@
 import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateMovieDto {
+export class SelectMovieDto {
   @ApiProperty({
     example: 'superman', // 예시 데이터
     description: '영화 제목', // 설명
@@ -20,14 +20,4 @@ export class CreateMovieDto {
   @IsNotEmpty()
   @IsInt()
   year: number;
-
-  @ApiProperty({
-    example: ['action'],
-    description: '장르',
-    type: 'string[]', // 데이터 타입 (기본값은 string)
-    required: true,
-  })
-  @IsNotEmpty()
-  @IsString({ each: true })
-  genres: string[];
 }

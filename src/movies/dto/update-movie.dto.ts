@@ -1,13 +1,11 @@
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateMovieDto {
+export class UpdateMovieDto {
   @ApiProperty({
     example: 'superman', // 예시 데이터
     description: '영화 제목', // 설명
-    required: true, // 필수 전송 데이터 설정 (true / false)
   })
-  @IsNotEmpty()
   @IsString()
   title: string;
 
@@ -15,9 +13,7 @@ export class CreateMovieDto {
     example: '2024',
     description: '개봉 일자',
     type: 'number', // 데이터 타입 (기본값은 string)
-    required: true,
   })
-  @IsNotEmpty()
   @IsInt()
   year: number;
 
@@ -25,9 +21,7 @@ export class CreateMovieDto {
     example: ['action'],
     description: '장르',
     type: 'string[]', // 데이터 타입 (기본값은 string)
-    required: true,
   })
-  @IsNotEmpty()
   @IsString({ each: true })
   genres: string[];
 }
